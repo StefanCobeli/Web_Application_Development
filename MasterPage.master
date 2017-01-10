@@ -8,19 +8,17 @@
     <asp:ContentPlaceHolder id="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
-<body>
+<body runat="server">
     <asp:Label ID="Label1" runat="server" Text="Label">
                MasterPageContent: Aici vom pune un logo
     </asp:Label> <br>
-    <asp:LoginView ID="LoginView1" runat="server">
+    <asp:Label ID="Eticheta" runat="server" Text="Vizibiliatete" Visible="false"></asp:Label>
+    <asp:LoginView ID="LoginView1" runat="server" Visible="false">
         <AnonymousTemplate>
-            <asp:HyperLink ID="registerLink" NavigateUrl="~/Register.aspx" runat="server" ForeColor="Teal">Inregistrare</asp:HyperLink>
-            <asp:HyperLink ID="loginLink" NavigateUrl="~/Login.aspx" runat="server" ForeColor="Teal">Autentificare</asp:HyperLink>
-            
+            Vizitator
         </AnonymousTemplate>
         <LoggedInTemplate>
             Salutare Utilizatorule
-            <asp:Literal ID="numeUtiliator"> </asp:Literal>
         </LoggedInTemplate>
         <RoleGroups>
             <asp:RoleGroup>
@@ -32,8 +30,15 @@
         </RoleGroups>
     </asp:LoginView>
 
+
+   
+
     <form id="form1" runat="server">
     <div>
+         <asp:HyperLink ID="registerLink" NavigateUrl="~/Register.aspx" runat="server" Visible="false" ForeColor="Teal">Inregistrarea</asp:HyperLink>
+         <asp:HyperLink ID="loginLink" NavigateUrl="~/Login.aspx" runat="server" Visible="false" ForeColor="Teal">Autentificare</asp:HyperLink>
+         <asp:LinkButton ID="LogoutButton" runat="server" OnClick="LogoutButton_Click" Visible="false" Text="Părăsește Contul">
+        </asp:LinkButton>
         <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
             
         </asp:ContentPlaceHolder>

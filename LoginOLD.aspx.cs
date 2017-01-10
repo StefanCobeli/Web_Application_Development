@@ -7,40 +7,62 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class Register : System.Web.UI.Page
+public partial class Login : System.Web.UI.Page
 {
     private const String sqlConnectionString = "Data Source=(LocalDB)\\v11.0;AttachDbFilename=C:\\Users\\Stefan\\Desktop\\DAW\\Lab07Try\\App_Data\\Database.mdf;Integrated Security=True";
     protected void Page_Load(object sender, EventArgs e)
     {
         if (CheckLogin()) {
-            Response.Redirect("ProfilePage.aspx", true);
+            Response.Redirect("Default.aspx", true);
         }
+        Login1.UserName = "Stefanel";
+        
 
     }
-
-    protected void ContinueButton_Click(object sender, EventArgs e)
+    protected void LoginButton_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Default.aspx", true);        
-    }
 
-    protected void CreateUserWizard1_CreatedUser(object sender, EventArgs e)
-    {
-        Response.Write(CreateUserWizard1.UserName + " has the email " 
-            + CreateUserWizard1.Email + "!\n");
         SqlConnection conn = new SqlConnection("Data Source=(LocalDB)\\v11.0;AttachDbFilename=C:\\Users\\Stefan\\Desktop\\DAW\\Lab07Try\\App_Data\\Database.mdf;Integrated Security=True");
         
-        string insertUserQuery = "insert into Utilizator(Nume, Parola, Email, ProfilPublic) values (@Nume, @Parola, @Email, 'True')";
-        SqlCommand insertCommand = new SqlCommand(insertUserQuery, conn);
-        conn.Open();
-        
-        insertCommand.Parameters.AddWithValue("@Nume", CreateUserWizard1.UserName);
-        insertCommand.Parameters.AddWithValue("@Parola", CreateUserWizard1.Password);
-        insertCommand.Parameters.AddWithValue("@Email", CreateUserWizard1.Email);
-        
-        insertCommand.ExecuteNonQuery();
-        conn.Close();
+        string queryDeVerificare = "SELECT Parola, Prenume FROM Utilizator WHERE (Nume=@Nume)";
+		// deschiderea conexiunii. Poate arunca Exceptie daca nu reuseste
+		conn.Open();
+		//crearea comenzi SQL
+		SqlCommand verificare = new SqlCommand(queryDeVerificare, conn);
+		//adaugarea parametrilor si definirea tipului lor
+		verificare.Parameters.AddWithValue("@Nume", Login1.UserName);
+		//scalar returneaza o singura valoare
+		SqlDataReader reader = verificare.ExecuteReader();
 
-    }
+        if (reader.Read()) {
+            string password = (string)reader["Parola"];
+            //DDLBrand.SelectedValue = reader["IdBrand"].ToString();
+            password = password.Trim();
+            if (Login1.Password == password)
+            {
+                
+                Session["Utilizator"] = Login1.UserName;
+                Session["Parola"] = Login1.Password;
+                
+                if (reader["Prenume"] == null){
+                    Response.Redirect("FirstLogin.aspx");
+                    conn.Close();
+                    return;
+                }
+                conn.Close();
+                Response.Redirect("ProfilePage.aspx");
+            }
+            else
+            {
+                //parola invalida
+                Login1.FailureText = "Parola nu este valida!";
+                conn.Close();
+                return;
+            }
+            }
+        }   
+        
+
     private bool CheckLogin()
     {
         //daca nu avem user trebuie sa ne logam
@@ -55,7 +77,7 @@ public partial class Register : System.Web.UI.Page
         //adaugarea parametrilor si definirea tipului lor
         cmd.Parameters.Add(new SqlParameter("@Nume", TypeCode.String));
         cmd.Parameters["@Nume"].Value = Session["Utilizator"].ToString();
-        
+
         SqlDataReader reader = cmd.ExecuteReader();
         if (reader.Read())
         {
