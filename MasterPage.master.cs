@@ -1,60 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class MasterPage : System.Web.UI.MasterPage
 {
-    private const String sqlConnectionString = "Data Source=(LocalDB)\\v11.0;AttachDbFilename=C:\\Users\\Stefan\\Desktop\\DAW\\Lab07Try\\App_Data\\Database.mdf;Integrated Security=True";
-    
+    protected const String sqlConnectionString = "Data Source=(LocalDB)\\v11.0;AttachDbFilename=C:\\Users\\Stefan\\Desktop\\DAW\\Lab07Try\\App_Data\\Database.mdf;Integrated Security=True";
+   
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (CheckLogin())
+        if (userIsLoggedin())
         {
-            LogoutButton.Visible = true;
-        }
-        else {
-            loginLink.Visible = true;
-            registerLink.Visible = true;
-            LoginView1.Visible = true;
+            LoggedInUserName.Text = Membership.GetUser().UserName;
         }
     }
-    protected void LogoutButton_Click(object sender, EventArgs e)
-    {
-        Session["Utilizator"] = null;
-        Session["Parola"] = null;
-        Response.Redirect("Default.aspx");
-    }
-    private bool CheckLogin()
-    {
-        //daca nu avem user trebuie sa ne logam
-        // poate a expirat sesiunea sau poate cineva vrea sa intre prin URL
-        if (Session["Utilizator"] == null || string.IsNullOrEmpty(Session["Utilizator"].ToString()))
-            return false;
-        SqlConnection conn = new SqlConnection(sqlConnectionString);
-        string findUserQuery = "SELECT Parola FROM Utilizator WHERE (Nume=@Nume)";
-        conn.Open();
 
-        SqlCommand cmd = new SqlCommand(findUserQuery, conn);
-        //adaugarea parametrilor si definirea tipului lor
-        cmd.Parameters.Add(new SqlParameter("@Nume", TypeCode.String));
-        cmd.Parameters["@Nume"].Value = Session["Utilizator"].ToString();
-
-        SqlDataReader reader = cmd.ExecuteReader();
-        if (reader.Read())
+    protected void SearchButton_Click(object sender, EventArgs e)
+    {
+        if (String.IsNullOrEmpty(SearchBox.Text))
         {
-            string queryPass = (string)reader[0];
-            queryPass = queryPass.Trim();
-            if (Session["Parola"].ToString() == queryPass)
-            {
-                conn.Close();
-                return true;
-            }
+            return;
         }
-        conn.Close();
-        return false;
+        Response.Redirect("Search.aspx?Name=" + SearchBox.Text, true);
+    }
+
+    protected bool userIsLoggedin()
+    {
+        return (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
     }
 }

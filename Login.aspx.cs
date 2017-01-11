@@ -17,6 +17,7 @@ public partial class Login_v2 : System.Web.UI.Page
         {
             string nume = Membership.GetUser().UserName;
             Response.Redirect("Default.aspx");
+           
         }
         else
         {

@@ -8,39 +8,24 @@
     <asp:ContentPlaceHolder id="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
-<body runat="server">
-    <asp:Label ID="Label1" runat="server" Text="Label">
-               MasterPageContent: Aici vom pune un logo
-    </asp:Label> <br>
-    <asp:Label ID="Eticheta" runat="server" Text="Vizibiliatete" Visible="false"></asp:Label>
-    <asp:LoginView ID="LoginView1" runat="server" Visible="false">
-        <AnonymousTemplate>
-            Vizitator
-        </AnonymousTemplate>
-        <LoggedInTemplate>
-            Salutare Utilizatorule
-        </LoggedInTemplate>
-        <RoleGroups>
-            <asp:RoleGroup>
-                <ContentTemplate>
-                    Salut Utilizator cu Rol
-                </ContentTemplate>
-            </asp:RoleGroup>
-            
-        </RoleGroups>
-    </asp:LoginView>
-
-
-   
-
+<body>
     <form id="form1" runat="server">
     <div>
-         <asp:HyperLink ID="registerLink" NavigateUrl="~/Register.aspx" runat="server" Visible="false" ForeColor="Teal">Inregistrarea</asp:HyperLink>
-         <asp:HyperLink ID="loginLink" NavigateUrl="~/Login.aspx" runat="server" Visible="false" ForeColor="Teal">Autentificare</asp:HyperLink>
-         <asp:LinkButton ID="LogoutButton" runat="server" OnClick="LogoutButton_Click" Visible="false" Text="Părăsește Contul">
-        </asp:LinkButton>
+        <asp:LoginView ID="LoginView1" runat="server">
+            <AnonymousTemplate>
+                Vizitator
+                <asp:HyperLink ID="registerLink" NavigateUrl="~/Register.aspx" runat="server" Visible="false" ForeColor="Teal">Inregistrarea</asp:HyperLink>
+            </AnonymousTemplate>
+            <LoggedInTemplate>
+                Logat este utilizatorul
+            </LoggedInTemplate>
+        </asp:LoginView>
+        <asp:Label ID="LoggedInUserName" runat="server"></asp:Label>
+        <asp:LoginStatus ID="LoginStatus1" runat="server" LogoutText="Delogare" LoginText="Logare" />
+        <asp:TextBox ID="SearchBox" runat="server" placeholder="Caută utilizatori"></asp:TextBox>
+        <asp:Button ID="SearchButton" OnClick="SearchButton_Click" Text="Caută" runat="server" />
         <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
-            
+        
         </asp:ContentPlaceHolder>
     </div>
     </form>
