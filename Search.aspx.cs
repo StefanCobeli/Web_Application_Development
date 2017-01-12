@@ -19,7 +19,9 @@ public partial class Search : System.Web.UI.Page
         {
             ((HyperLink)foundedUser.FindControl("UserGasit")).NavigateUrl = "~/ProfilePage.aspx?Name=" + ((Label)foundedUser.FindControl("FoundedNick")).Text;
             HyperLink foundedName = (HyperLink)foundedUser.FindControl("UserGasit");
-            foundedName.NavigateUrl = "~/ProfilePage.aspx?Name=" + ((Label)foundedUser.FindControl("FoundedNick")).Text; 
+            foundedName.NavigateUrl = "~/ProfilePage.aspx?Name=" + ((Label)foundedUser.FindControl("FoundedNick")).Text;
+            foundedName.Text = "blaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
         }
 
     }

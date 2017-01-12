@@ -9,6 +9,26 @@
         <asp:Label ID="ProfileName" runat="server" Text="Label"></asp:Label>
         <asp:Image ID="ProfileImg" runat="server" />
     </div>
+    <div id="FriendZone" style="float:right">
+        <asp:Literal runat="server">Zona Prietenilor:</asp:Literal>
+        <asp:Repeater ID="FriendRepeater" runat="server" DataSourceID="SqlFriendsDataSource">
+            <ItemTemplate>
+                <br>
+                <asp:HyperLink ID="UserGasit" runat="server" NavigateUrl='<%# "~/ProfilePage.aspx?Name=" + Eval("Nick")%>'>
+                <%# Eval("Nume") %>,  
+                <%# Eval("Prenume") %>
+            </asp:HyperLink>
+           (<asp:Label ID="FoundedNick" runat="server"><%#Eval("Nick") %></asp:Label>)
+            <br>
+            </ItemTemplate>
+        </asp:Repeater>
+         <asp:SqlDataSource ID="SqlFriendsDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:DefaultConnection %>" SelectCommand="SELECT [Nume_Primit], [Prenume_Primit], [Nick_Primit] FROM [Prieteni] WHERE ([Id_Cerut] = @Id_Cerut)">
+             <SelectParameters>
+                 <asp:SessionParameter Name="Id_Cerut" SessionField="UserID" Type="Object" />
+             </SelectParameters>
+        </asp:SqlDataSource>
+         <asp:Button ID="AddFriendsButton" runat="server"/>
+    </div>
     <div id="AlbumsZone">
         <asp:Literal runat="server">Zona albumelor: </asp:Literal>
         <asp:HyperLink ID="CreateNewAlbum" NavigateUrl="CreateNewAlbum.aspx" runat="server">

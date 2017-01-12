@@ -15,6 +15,7 @@ public partial class MasterPage : System.Web.UI.MasterPage
         if (userIsLoggedin())
         {
             LoggedInUserName.Text = Membership.GetUser().UserName;
+            LoggedInUserName.NavigateUrl = "~/ProfilePage.aspx";
         }
     }
 

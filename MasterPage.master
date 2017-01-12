@@ -11,16 +11,19 @@
 <body>
     <form id="form1" runat="server">
     <div>
+        <asp:LinkButton ID="HomeButton" Text="Pagina Principală" PostBackUrl="~/Default.aspx" runat="server"></asp:LinkButton>
         <asp:LoginView ID="LoginView1" runat="server">
             <AnonymousTemplate>
                 Vizitator
-                <asp:HyperLink ID="registerLink" NavigateUrl="~/Register.aspx" runat="server" Visible="false" ForeColor="Teal">Inregistrarea</asp:HyperLink>
+                <asp:HyperLink ID="registerLink" Text="Inregistrare" NavigateUrl="~/Register.aspx" runat="server" ForeColor="Teal">
+                    Inregistrarea
+                </asp:HyperLink>
             </AnonymousTemplate>
             <LoggedInTemplate>
                 Logat este utilizatorul
             </LoggedInTemplate>
         </asp:LoginView>
-        <asp:Label ID="LoggedInUserName" runat="server"></asp:Label>
+        <asp:HyperLink ID="LoggedInUserName" runat="server"></asp:HyperLink>
         <asp:LoginStatus ID="LoginStatus1" runat="server" LogoutText="Delogare" LoginText="Logare" />
         <asp:TextBox ID="SearchBox" runat="server" placeholder="Caută utilizatori"></asp:TextBox>
         <asp:Button ID="SearchButton" OnClick="SearchButton_Click" Text="Caută" runat="server" />

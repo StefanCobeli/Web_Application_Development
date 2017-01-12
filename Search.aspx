@@ -6,11 +6,13 @@
    
     <asp:Repeater ID="SearchResultsRepeater" runat="server" DataSourceID="SqlDataSource2">
         <ItemTemplate>
-            <asp:HyperLink ID="UserGasit" runat="server" NavigateUrl="~/Default.aspx">
+            <br>
+            <asp:HyperLink ID="UserGasit" runat="server" NavigateUrl='<%# "~/ProfilePage.aspx?Name=" + Eval("Nick")%>'>
                 <%# Eval("Nume") %>,  
                 <%# Eval("Prenume") %> (<%#Eval("Nick") %>)
             </asp:HyperLink>
             (<asp:Label ID="FoundedNick" runat="server"><%#Eval("Nick") %></asp:Label>)
+            <br>
         </ItemTemplate>
     </asp:Repeater>
     <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:DefaultConnection %>" SelectCommand="SELECT [Nume], [Prenume], [Nick] FROM [Utilizator] WHERE ([Prenume] LIKE '%' + @Prenume + '%') OR ([Nume] LIKE '%' + @Prenume + '%') OR ([Nick] LIKE '%' + @Prenume + '%')">

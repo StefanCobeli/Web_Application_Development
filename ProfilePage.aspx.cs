@@ -13,7 +13,8 @@ public partial class ProfilePage : System.Web.UI.Page
     protected String loggedUserName;
     protected void Page_Load(object sender, EventArgs e)
     {
-        String searchedUser = Request.QueryString["Utilizator"];
+        loggedUserName = Request.QueryString["Name"];
+        String searchedUser = Request.QueryString["Name"];
         if (!userIsLoggedin() && String.IsNullOrEmpty(searchedUser))
         {
             Response.Redirect("Login.aspx");
@@ -37,11 +38,14 @@ public partial class ProfilePage : System.Web.UI.Page
         SqlDataReader reader = infoQuery.ExecuteReader();
         if (reader.Read())
         {
-            ProfileName.Text = reader["Nume"].ToString() + reader["Prenume"] + "(" + reader["Nick"] + ")";
-            
+            if(!(bool)reader["ProfilPublic"])
+            {
+                Response.Redirect("ProfilPrivat.aspx?Name=" + reader["Nume"] + "  " + reader["Prenume"] + " (" + loggedUserName + ")");
+            }
+            ProfileName.Text = reader["Nume"].ToString() + reader["Prenume"] + "(" + reader["Nick"] + ")";   
             ProfileImg.ImageUrl = (string)reader["Link_Poza_Profil"];
             CoverImg.ImageUrl = (string)reader["Link_Poza_Cover"];
-            Response.Write("Logat este utilizatorul " + reader["Nume"] + "  " + reader["Prenume"] + " Numit și " + reader["Nick"] +" și are intimitatea " + reader["ProfilPublic"]);
+            Response.Write("Pagina aparține utilizatorului " + reader["Nume"] + "  " + reader["Prenume"] + " Numit și " + reader["Nick"] +". El are intimitatea " + reader["ProfilPublic"]);
         }
         else
         {

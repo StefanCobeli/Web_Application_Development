@@ -45,11 +45,18 @@ public partial class FirstLogin : System.Web.UI.Page
         savePicture("Cover");
         firstName = FirstName.Text;
         lastName = LastName.Text;
-        isPublic = Privacy.SelectedItem.Equals("Public") ? "True" : "False";
+        isPublic = Privacy.SelectedItem.Text.Equals("Public") ? "True" : "False";
         executeInsertionQuery();
         Response.Redirect("ProfilePage.aspx");
     }
 
+    protected void saveCoverPicture()
+    {
+    }
+    protected void saveProfilePicture()
+    {
+
+    }
     protected void executeInsertionQuery()
     {
         SqlConnection conn = new SqlConnection(sqlConnectionString);
@@ -71,13 +78,14 @@ public partial class FirstLogin : System.Web.UI.Page
         string fileName = type.Equals("Profile") ? this.ProfilePictureUpload.FileName : CoverPictureUpload.FileName;
         String timeStamp = DateTime.Now.ToString("yyyyMMddHHmmssffff");
         string fileType = Path.GetExtension(fileName);
-        ProfilePictureUpload.PostedFile.SaveAs(Server.MapPath("~/Data/") + userName + "/" + type + "_" + timeStamp + fileType);
-        if (type.Equals("Profile"))
+         if (type.Equals("Profile"))
         {
+            ProfilePictureUpload.PostedFile.SaveAs(Server.MapPath("~/Data/") + userName + "/" + type + "_" + timeStamp + fileType);
             profilePicLink = "~/Data/" + userName + "/" + type + "_" + timeStamp + fileType;
         } 
         else
         {
+            CoverPictureUpload.PostedFile.SaveAs(Server.MapPath("~/Data/") + userName + "/" + type + "_" + timeStamp + fileType);
             coverPicLink = "~/Data/" + userName + "/" + type + "_" + timeStamp + fileType;
      
         }
