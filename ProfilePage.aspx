@@ -54,9 +54,10 @@
                     <%# Eval("Prenume_Cerut") %>
                     </asp:HyperLink>
                     (<asp:Label ID="FoundedNick" runat="server"><%#Eval("Nick_Cerut") %></asp:Label>)
-                    <br>
+                    
                     <asp:LinkButton ID="AcceptFriendButton" 
                         PostBackUrl='<%# "~/ProfilePage.aspx?Accepted=" + Eval("Nick_Cerut") + "&SName=" + Eval("Nume_Cerut") + "&FName=" + Eval("Prenume_Cerut") %>' Text="Acceptă Prietenia" runat="server" />
+                    <br>
                 </ItemTemplate>
             </asp:Repeater>
             <asp:SqlDataSource ID="FriendRequestsDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:DefaultConnection %>" SelectCommand="SELECT [Nume_Cerut], [Prenume_Cerut], [Nick_Cerut] FROM [Prieteni] WHERE (([Nick_Primit] = @Nick_Primit) AND [Acceptat] = 'False')">
@@ -69,13 +70,29 @@
 
     <div id="AlbumsZone">
         <asp:Literal runat="server">Zona albumelor: </asp:Literal>
-        <asp:HyperLink ID="CreateNewAlbum" NavigateUrl="CreateNewAlbum.aspx" runat="server">
+        <asp:Repeater ID="AlbumRepteater" runat="server" DataSourceID="SqlAlbumDataSource1">
+                <ItemTemplate>
+                    <br>
+                    <asp:HyperLink ID="AlbumLink" 
+                        NavigateUrl='<%# "~/Album.aspx?AlbumName=" + Eval("Nume_Album") + "&User_Id=" + Eval("Id_Utilizator")%>' runat="server">
+                        <%# Eval("Nume_Album")%>  
+                    </asp:HyperLink>
+                </ItemTemplate>
+        </asp:Repeater>
+        <asp:SqlDataSource ID="SqlAlbumDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:DefaultConnection %>" SelectCommand="SELECT [Nume_Album], [Id_Utilizator] FROM [Album] WHERE [Id_Utilizator] = @Id_Utilizator">
+            <%--<SelectParameters>
+                <asp:SessionParameter Name="Id_Utilizator" SessionField="User_Id" Type="Object" />
+            </SelectParameters>--%>
+        </asp:SqlDataSource>
+        <asp:HyperLink ID="CreateNewAlbum" NavigateUrl="CreateNewAlbum.aspx" Visible="false" runat="server">
             Creează un nou album
         </asp:HyperLink>
     </div>
+
+
     <div id="GroupsZone">
         <asp:Literal runat="server">Zona grupurilor: </asp:Literal>
-        <asp:HyperLink ID="CreateNewGroup" NavigateUrl="CreateNewGroup.aspx" runat="server">
+        <asp:HyperLink ID="CreateNewGroup" NavigateUrl="CreateNewGroup.aspx" Visible="false" runat="server">
             Creeaza un nou grup
         </asp:HyperLink>
     </div>

@@ -21,6 +21,7 @@ public partial class ProfilePage : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        
         if (!String.IsNullOrEmpty(Request.QueryString["FName"]))
         {
             acceptFriendRequest();
@@ -46,9 +47,11 @@ public partial class ProfilePage : System.Web.UI.Page
             Response.Redirect("FirstLogin.aspx");
         }
         searchedUser = String.IsNullOrEmpty(Request.QueryString["Name"]) ? loggedUserName : Request.QueryString["Name"];
-        ownPage = loggedUserName.Equals(searchedUser);
+        ownPage = loggedUserName.Equals(searchedUser) == userIsLoggedin();
+        string usr = Membership.GetUser(searchedUser).ProviderUserKey.ToString().ToUpper();
         populateInformation();
-
+        CreateNewAlbum.NavigateUrl = "CreateNewAlbum.aspx";
+        SqlAlbumDataSource1.SelectParameters.Add("Id_Utilizator", usr);
     }
 
     protected void populateInformation()
@@ -65,11 +68,18 @@ public partial class ProfilePage : System.Web.UI.Page
             {
                 Response.Redirect("ProfilPrivat.aspx?SName=" + reader["Nume"] + "&FName=" + reader["Prenume"] + "&Nick=" + searchedUser);
             }
-            if(userIsLoggedin() && !loggedUserName.Equals(searchedUser))
+            searchedFirstName = reader["Nume"].ToString();
+            searchedSecondName = reader["Prenume"].ToString();
+            if (userIsLoggedin())
             {
-                FriendshipRequestButton.Visible = true;
-                searchedFirstName = reader["Nume"].ToString();
-                searchedSecondName = reader["Prenume"].ToString();
+                if (loggedUserName.Equals(searchedUser))
+                {
+                    displayOwnInformation();
+                }
+                else
+                {
+                    FriendshipRequestButton.Visible = true;
+                }
             }
             displayFriendRequests();
             Session["Nick"] = reader["Nick"];
@@ -209,5 +219,11 @@ public partial class ProfilePage : System.Web.UI.Page
         acceptFriendCommand.Parameters.AddWithValue("@Accepted", Request.QueryString["Accepted"]);
         acceptFriendCommand.ExecuteNonQuery();
         conn.Close();
+    }
+
+    protected void displayOwnInformation()
+    {
+        CreateNewAlbum.Visible = true;
+        CreateNewGroup.Visible = true;
     }
 }
