@@ -50,13 +50,6 @@ public partial class FirstLogin : System.Web.UI.Page
         Response.Redirect("ProfilePage.aspx");
     }
 
-    protected void saveCoverPicture()
-    {
-    }
-    protected void saveProfilePicture()
-    {
-
-    }
     protected void executeInsertionQuery()
     {
         SqlConnection conn = new SqlConnection(sqlConnectionString);

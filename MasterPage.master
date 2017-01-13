@@ -27,6 +27,9 @@
         <asp:LoginStatus ID="LoginStatus1" runat="server" LogoutText="Delogare" LoginText="Logare" />
         <asp:TextBox ID="SearchBox" runat="server" placeholder="Caută utilizatori"></asp:TextBox>
         <asp:Button ID="SearchButton" OnClick="SearchButton_Click" Text="Caută" runat="server" />
+        <div style="float:right">
+            <asp:Button ID="MessagesLink" Text="Căsuța poștală" Visible="false" runat="server"/>
+        </div>
         <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
         
         </asp:ContentPlaceHolder>

@@ -12,7 +12,7 @@
                 <%# Eval("Prenume") %> (<%#Eval("Nick") %>)
             </asp:HyperLink>
             (<asp:Label ID="FoundedNick" runat="server"><%#Eval("Nick") %></asp:Label>)
-            <br>
+             <br>
         </ItemTemplate>
     </asp:Repeater>
     <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:DefaultConnection %>" SelectCommand="SELECT [Nume], [Prenume], [Nick] FROM [Utilizator] WHERE ([Prenume] LIKE '%' + @Prenume + '%') OR ([Nume] LIKE '%' + @Prenume + '%') OR ([Nick] LIKE '%' + @Prenume + '%')">

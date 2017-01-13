@@ -11,24 +11,62 @@
     </div>
     <div id="FriendZone" style="float:right">
         <asp:Literal runat="server">Zona Prietenilor:</asp:Literal>
+        <asp:Button ID="FriendshipRequestButton" Text="Cere prietenia" Visible="false" runat="server" OnClick="FriendshipRequestButton_Click" />
         <asp:Repeater ID="FriendRepeater" runat="server" DataSourceID="SqlFriendsDataSource">
             <ItemTemplate>
                 <br>
-                <asp:HyperLink ID="UserGasit" runat="server" NavigateUrl='<%# "~/ProfilePage.aspx?Name=" + Eval("Nick")%>'>
-                <%# Eval("Nume") %>,  
-                <%# Eval("Prenume") %>
+                <asp:HyperLink ID="FoundedFriend" runat="server" NavigateUrl='<%# "~/ProfilePage.aspx?Name=" + Eval("Nick_Primit")%>'>
+                <%# Eval("Nume_Primit") %>,  
+                <%# Eval("Prenume_Primit") %>
             </asp:HyperLink>
-           (<asp:Label ID="FoundedNick" runat="server"><%#Eval("Nick") %></asp:Label>)
+           (<asp:Label ID="FoundedNick" runat="server"><%#Eval("Nick_Primit") %></asp:Label>)
             <br>
             </ItemTemplate>
         </asp:Repeater>
-         <asp:SqlDataSource ID="SqlFriendsDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:DefaultConnection %>" SelectCommand="SELECT [Nume_Primit], [Prenume_Primit], [Nick_Primit] FROM [Prieteni] WHERE ([Id_Cerut] = @Id_Cerut)">
+         <asp:SqlDataSource ID="SqlFriendsDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:DefaultConnection %>" SelectCommand="SELECT [Nume_Primit], [Prenume_Primit], [Nick_Primit] FROM [Prieteni] WHERE ([Nick_Cerut] = @Nick_Cerut) AND [Acceptat] = 'True'">
              <SelectParameters>
-                 <asp:SessionParameter Name="Id_Cerut" SessionField="UserID" Type="Object" />
+                 <asp:SessionParameter Name="Nick_Cerut" SessionField="Nick" Type="Object" />
              </SelectParameters>
         </asp:SqlDataSource>
-         <asp:Button ID="AddFriendsButton" runat="server"/>
+        <asp:Repeater ID="FriendRepeater_Send" runat="server" DataSourceID="SqlFriendsDataSource_Send">
+            <ItemTemplate>
+                <br>
+                <asp:HyperLink ID="FoundedFriend" runat="server" NavigateUrl='<%# "~/ProfilePage.aspx?Name=" + Eval("Nick_Cerut")%>'>
+                <%# Eval("Nume_Cerut") %>,  
+                <%# Eval("Prenume_Cerut") %>
+            </asp:HyperLink>
+           (<asp:Label ID="FoundedNick" runat="server"><%#Eval("Nick_Cerut") %></asp:Label>)
+            <br>
+            </ItemTemplate>
+        </asp:Repeater>
+         <asp:SqlDataSource ID="SqlFriendsDataSource_Send" runat="server" ConnectionString="<%$ ConnectionStrings:DefaultConnection %>" SelectCommand="SELECT [Nume_Cerut], [Prenume_Cerut], [Nick_Cerut] FROM [Prieteni] WHERE ([Nick_Primit] = @Nick_Primit) AND [Acceptat] = 'True'">
+             <SelectParameters>
+                 <asp:SessionParameter Name="Nick_Primit" SessionField="Nick" Type="Object" />
+             </SelectParameters>
+        </asp:SqlDataSource>
+        <div id="FriendRequests" style="visibility:hidden" runat="server">
+            <asp:Label runat="server">Cereri de prietenie:</asp:Label>
+            <asp:Repeater ID="FriendRequestsRepeater" runat="server" DataSourceID="FriendRequestsDataSource">
+                <ItemTemplate>
+                    <br>
+                    <asp:HyperLink ID="FoundedFriend" runat="server" NavigateUrl='<%# "~/ProfilePage.aspx?Name=" + Eval("Nick_Cerut")%>'>
+                    <%# Eval("Nume_Cerut") %>,  
+                    <%# Eval("Prenume_Cerut") %>
+                    </asp:HyperLink>
+                    (<asp:Label ID="FoundedNick" runat="server"><%#Eval("Nick_Cerut") %></asp:Label>)
+                    <br>
+                    <asp:LinkButton ID="AcceptFriendButton" 
+                        PostBackUrl='<%# "~/ProfilePage.aspx?Accepted=" + Eval("Nick_Cerut") + "&SName=" + Eval("Nume_Cerut") + "&FName=" + Eval("Prenume_Cerut") %>' Text="Acceptă Prietenia" runat="server" />
+                </ItemTemplate>
+            </asp:Repeater>
+            <asp:SqlDataSource ID="FriendRequestsDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:DefaultConnection %>" SelectCommand="SELECT [Nume_Cerut], [Prenume_Cerut], [Nick_Cerut] FROM [Prieteni] WHERE (([Nick_Primit] = @Nick_Primit) AND [Acceptat] = 'False')">
+                <SelectParameters>
+                 <asp:SessionParameter Name="Nick_Primit" SessionField="Nick" Type="Object" />
+                </SelectParameters>
+            </asp:SqlDataSource>
+        </div>
     </div>
+
     <div id="AlbumsZone">
         <asp:Literal runat="server">Zona albumelor: </asp:Literal>
         <asp:HyperLink ID="CreateNewAlbum" NavigateUrl="CreateNewAlbum.aspx" runat="server">

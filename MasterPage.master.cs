@@ -16,6 +16,8 @@ public partial class MasterPage : System.Web.UI.MasterPage
         {
             LoggedInUserName.Text = Membership.GetUser().UserName;
             LoggedInUserName.NavigateUrl = "~/ProfilePage.aspx";
+            MessagesLink.Visible = true;
+            MessagesLink.PostBackUrl = "~/PrivateMessages.aspx?Nick=" + Membership.GetUser().UserName;
         }
     }
 
